@@ -1,0 +1,56 @@
+{"level":"log","message":"[vite] server connection lost. Polling for restart...","timestamp":1792414987029}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415035761}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415036310}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792415278396}
+{"level":"debug","message":"[vite] hot updated: /src/components/GuessGame.tsx","timestamp":1792415278397}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415292764}
+{"level":"error","message":"Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.","timestamp":1792415292791}
+{"level":"debug","message":"[vite] invalidate /src/main.tsx: Could not Fast Refresh (\"true\" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports","timestamp":1792415292793}
+{"level":"debug","message":"[vite] hot updated: /src/main.tsx","timestamp":1792415292793}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792415292793}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792415293348}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415296284}
+{"level":"log","message":"[vite] server connection lost. Polling for restart...","timestamp":1792415354009}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415394213}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415394560}
+{"level":"error","message":"Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.","timestamp":1792415447810}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792415447811}
+{"level":"debug","message":"[vite] hot updated: /src/components/GuessGame.tsx","timestamp":1792415447812}
+{"level":"debug","message":"[vite] invalidate /src/main.tsx: Could not Fast Refresh (\"true\" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports","timestamp":1792415447812}
+{"level":"debug","message":"[vite] hot updated: /src/main.tsx","timestamp":1792415447812}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415465666}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415496710}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415545847}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415851137}
+{"level":"debug","message":"Provider initialization - wallet not connected","timestamp":1792415851757}
+{"level":"debug","message":"[vite] connected.","timestamp":1792415870136}
+{"level":"debug","message":"[vite] connected.","timestamp":1792416026530}
+{"level":"error","message":"Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.","timestamp":1792416125343}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792416125344}
+{"level":"debug","message":"[vite] hot updated: /src/components/GuessGame.tsx","timestamp":1792416125344}
+{"level":"debug","message":"[vite] invalidate /src/main.tsx: Could not Fast Refresh (\"true\" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports","timestamp":1792416125345}
+{"level":"debug","message":"[vite] hot updated: /src/main.tsx","timestamp":1792416125345}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792416125566}
+{"level":"debug","message":"[vite] connected.","timestamp":1792417608759}
+{"level":"debug","message":"[vite] connected.","timestamp":1792417802052}
+{"level":"debug","message":"[vite] connected.","timestamp":1792417817580}
+{"level":"debug","message":"Provider initialization - wallet not connected","timestamp":1792418218880}
+{"level":"debug","message":"[vite] connected.","timestamp":1792418230950}
+{"level":"error","message":"Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.","timestamp":1792418443214}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792418443218}
+{"level":"debug","message":"[vite] hot updated: /src/components/GuessGame.tsx","timestamp":1792418443218}
+{"level":"debug","message":"[vite] invalidate /src/main.tsx: Could not Fast Refresh (\"true\" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports","timestamp":1792418443219}
+{"level":"debug","message":"[vite] hot updated: /src/main.tsx","timestamp":1792418443219}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792418443536}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792418443536}
+{"level":"debug","message":"[vite] connected.","timestamp":1792418568679}
+{"level":"debug","message":"[vite] connected.","timestamp":1792418750305}
+{"level":"debug","message":"[vite] connected.","timestamp":1792418767464}
+{"level":"debug","message":"[vite] connected.","timestamp":1792418768767}
+{"level":"debug","message":"Provider initialization - wallet not connected","timestamp":1792419195340}
+{"level":"debug","message":"[vite] connected.","timestamp":1792419195454}
+{"level":"error","message":"[vite] Failed to reload /src/components/GuessGame.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)","timestamp":1792419381039}
+{"level":"error","message":"[vite] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)","timestamp":1792419381219}
+{"level":"debug","message":"[vite] hot updated: /src/index.css","timestamp":1792419381219}
+{"level":"debug","message":"[vite] hot updated: /src/components/GuessGame.tsx","timestamp":1792419381219}
+{"level":"debug","message":"[vite] hot updated: /src/main.tsx","timestamp":1792419381220}
