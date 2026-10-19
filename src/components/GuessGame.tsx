@@ -7,12 +7,17 @@ import { encodePacked, keccak256 } from 'viem'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Trophy, RefreshCw, CheckCircle, Loader2, ArrowRight, Hash } from 'lucide-react'
 import { toast } from 'sonner'
-import { getUsdc, requireChain, buildTxExplorerUrl } from '@/onchain-facts'
+// Arc Testnet facts (inlined — no @/onchain-facts module in this repo)
+const ARC_EXPLORER = 'https://explorer.testnet.arc.io'
+const USDC_ADDRESS_CONST = '0x3600000000000000000000000000000000000000' as `0x${string}`
+function buildTxExplorerUrl(_chainId: number, hash: string | undefined) {
+  return hash ? `${ARC_EXPLORER}/tx/${hash}` : undefined
+}
 
 // ─── Contract config ─────────────────────────────────────────────────────────
 const CHAIN_ID = 5042002 // Arc Testnet
 
-const CONTRACT_ADDRESS = '0x0ed96fd2e333e4e739fb46e3514d9321505cf057' as const
+const CONTRACT_ADDRESS = '0xfdf69748331fc2c91a851e62115755d56ec59207' as const
 
 const CONTRACT_ABI = [
   {
@@ -69,8 +74,12 @@ const CONTRACT_ABI = [
 const DEMO_GAME_SERVER_PK = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80' as const
 const gameServerAccount = privateKeyToAccount(DEMO_GAME_SERVER_PK)
 
+// ─── Game constants ───────────────────────────────────────────────────────────
+const SECRET_MAX = 1000
+const MAX_ATTEMPTS = 10
+
 // ─── Types ────────────────────────────────────────────────────────────────────
-type GameState = 'idle' | 'playing' | 'won' | 'approving' | 'minting' | 'minted'
+type GameState = 'idle' | 'playing' | 'won' | 'lost' | 'approving' | 'minting' | 'minted'
 type HintState = 'none' | 'too-high' | 'too-low' | 'correct'
 
 interface LeaderboardEntry {
@@ -121,7 +130,7 @@ async function signScore(
 }
 
 function generateSecret(): number {
-  return Math.floor(Math.random() * 100) + 1
+  return Math.floor(Math.random() * SECRET_MAX) + 1
 }
 
 // ─── HintBubble ───────────────────────────────────────────────────────────────
@@ -237,8 +246,7 @@ export function GuessGame() {
 
   const isWrongChain = isConnected && chainId !== CHAIN_ID
 
-  const usdcFact = getUsdc(CHAIN_ID)!
-  const USDC_ADDRESS = usdcFact.address as `0x${string}`
+  const USDC_ADDRESS = USDC_ADDRESS_CONST
 
   const { data: playerNonce, refetch: refetchNonce } = useReadContract({
     address: CONTRACT_ADDRESS,
@@ -318,8 +326,8 @@ export function GuessGame() {
 
   const submitGuess = useCallback(() => {
     const n = parseInt(guess, 10)
-    if (isNaN(n) || n < 1 || n > 100) {
-      toast.error('Enter a number between 1 and 100')
+    if (isNaN(n) || n < 1 || n > SECRET_MAX) {
+      toast.error(`Enter a number between 1 and ${SECRET_MAX}`)
       return
     }
     const newCount = guessCount + 1
@@ -330,6 +338,10 @@ export function GuessGame() {
       setHint('correct')
       setFinalGuessCount(newCount)
       setGameState('won')
+    } else if (newCount >= MAX_ATTEMPTS) {
+      // Used all attempts without guessing correctly
+      setHint(n > secret ? 'too-high' : 'too-low')
+      setGameState('lost')
     } else if (n > secret) {
       setHint('too-high')
     } else {
@@ -370,10 +382,10 @@ export function GuessGame() {
     })()
   }, [address, isWrongChain, finalGuessCount, playerNonce, refetchNonce, approveUsdc, USDC_ADDRESS, switchChain])
 
-  const chain = requireChain(CHAIN_ID)
-  const maxGuessesForRing = 20
-  const ringPercent = ['playing', 'won', 'minted', 'approving', 'minting'].includes(gameState)
-    ? Math.min((guessCount / maxGuessesForRing) * 100, 100)
+  const chain = { explorerBase: ARC_EXPLORER }
+  const attemptsLeft = MAX_ATTEMPTS - guessCount
+  const ringPercent = ['playing', 'won', 'lost', 'minted', 'approving', 'minting'].includes(gameState)
+    ? Math.min((guessCount / MAX_ATTEMPTS) * 100, 100)
     : 0
 
   const playerBest = bestScore ? Number(bestScore) : null
@@ -396,7 +408,7 @@ export function GuessGame() {
             <h1 className="display font-bold text-xl" style={{ color: 'var(--ink)', letterSpacing: '-0.02em' }}>
               Guess the Number
             </h1>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>1–100 · Arc Testnet</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>1–1,000 · 10 attempts · Arc Testnet</p>
           </div>
           <ConnectKitButton />
         </header>
@@ -441,7 +453,7 @@ export function GuessGame() {
                   Guess My Number
                 </h2>
                 <p className="text-sm mt-2 text-balance" style={{ color: 'var(--muted)' }}>
-                  I've picked a secret number between 1 and 100. Guess it in as few tries as possible, then mint your score on Arc for 1 USDC.
+                  I've picked a secret number between 1 and 1,000. Guess it in 10 attempts or fewer, then mint your score on Arc for 1 USDC.
                 </p>
               </div>
 
@@ -498,15 +510,25 @@ export function GuessGame() {
               style={glass.card}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-semibold" style={{ color: 'var(--muted)' }}>GUESSES</span>
-                <span className="display font-bold text-2xl tabular-nums" style={{ color: 'var(--ink)' }}>
-                  {guessCount}
+                <span className="text-xs font-semibold" style={{ color: 'var(--muted)' }}>
+                  ATTEMPT {guessCount + 1} / {MAX_ATTEMPTS}
+                </span>
+                <span
+                  className="text-xs font-semibold tabular-nums"
+                  style={{ color: attemptsLeft <= 3 ? 'var(--danger)' : 'var(--muted)' }}
+                >
+                  {attemptsLeft} left
                 </span>
               </div>
               <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--surface-muted)' }}>
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(90deg, #5fbeff, #af8ff4)', width: `${ringPercent}%` }}
+                  style={{
+                    background: attemptsLeft <= 3
+                      ? 'linear-gradient(90deg, #f05c6b, #ba2b4c)'
+                      : 'linear-gradient(90deg, #5fbeff, #af8ff4)',
+                    width: `${ringPercent}%`,
+                  }}
                   animate={{ width: `${ringPercent}%` }}
                   transition={{ type: 'spring', stiffness: 200 }}
                 />
@@ -516,7 +538,7 @@ export function GuessGame() {
                 <p className="display font-bold text-lg" style={{ color: 'var(--ink)' }}>
                   What's my number?
                 </p>
-                <p className="text-sm" style={{ color: 'var(--muted)' }}>Pick between 1 and 100</p>
+                <p className="text-sm" style={{ color: 'var(--muted)' }}>Pick between 1 and 1,000</p>
               </div>
 
               <AnimatePresence>
@@ -528,11 +550,11 @@ export function GuessGame() {
                   ref={inputRef}
                   type="number"
                   min={1}
-                  max={100}
+                  max={SECRET_MAX}
                   value={guess}
                   onChange={e => setGuess(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="1 – 100"
+                  placeholder="1 – 1000"
                   className="flex-1 rounded-2xl px-4 py-4 display font-bold text-center outline-none tabular-nums"
                   style={{
                     ...glass.inner,
@@ -554,6 +576,45 @@ export function GuessGame() {
                   <ArrowRight size={22} />
                 </button>
               </div>
+            </motion.div>
+          )}
+
+          {gameState === 'lost' && (
+            <motion.div
+              key="lost"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              className="rounded-3xl p-6 space-y-5 relative overflow-hidden"
+              style={glass.card}
+            >
+              <div className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl" style={{ background: 'linear-gradient(90deg, #f05c6b, #ba2b4c)' }} />
+
+              <div className="text-center pt-2 space-y-2">
+                <div className="display font-bold text-5xl" style={{ color: 'var(--danger)' }}>✗</div>
+                <p className="display font-bold text-2xl" style={{ color: 'var(--ink)' }}>Out of guesses!</p>
+                <p className="text-sm text-balance" style={{ color: 'var(--muted)' }}>
+                  The number was <span className="font-bold tabular-nums" style={{ color: 'var(--ink)' }}>{secret}</span>.
+                  You used all {MAX_ATTEMPTS} attempts. Better luck next time!
+                </p>
+              </div>
+
+              <button
+                onClick={startGame}
+                className="w-full rounded-2xl py-4 font-bold text-base flex items-center justify-center gap-2 transition-all"
+                style={{ background: 'var(--accent)', color: 'white' }}
+              >
+                <RefreshCw size={16} />
+                Try Again
+              </button>
+              <button
+                onClick={() => setShowLeaderboard(v => !v)}
+                className="w-full rounded-2xl py-3 font-semibold text-sm flex items-center justify-center gap-2"
+                style={{ background: 'var(--surface-muted)', color: 'var(--ink-2)' }}
+              >
+                <Trophy size={14} />
+                View Leaderboard
+              </button>
             </motion.div>
           )}
 
@@ -587,10 +648,10 @@ export function GuessGame() {
                 <span
                   className="font-semibold"
                   style={{
-                    color: finalGuessCount <= 5 ? 'var(--success)' : finalGuessCount <= 10 ? '#1061a6' : 'var(--muted)',
+                    color: finalGuessCount <= 3 ? 'var(--success)' : finalGuessCount <= 6 ? '#1061a6' : 'var(--muted)',
                   }}
                 >
-                  {finalGuessCount <= 5 ? 'Excellent' : finalGuessCount <= 10 ? 'Good' : finalGuessCount <= 20 ? 'Average' : 'Keep practicing'}
+                  {finalGuessCount <= 3 ? 'Outstanding' : finalGuessCount <= 6 ? 'Great' : finalGuessCount <= 8 ? 'Good' : 'Made it!'}
                 </span>
               </div>
 

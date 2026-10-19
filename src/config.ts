@@ -8,14 +8,11 @@ import { mainnet } from 'wagmi/chains'
 import { arcTestnet } from 'viem/chains'
 import { injected } from 'wagmi/connectors'
 import { registerChain } from './tracing'
-import { requireChain } from './onchain-facts'
 
-// Use the canonical RPC URL from Arc Studio's registry.
-// viem/chains bakes in a stale rpcUrls value (rpc.testnet.arc.network) — override
-// the whole chain object so wallet_addEthereumChain pushes the correct URL into
-// MetaMask instead of the stale one.
-const arcFact = requireChain(arcTestnet.id)
-const ARC_TESTNET_RPC = arcFact.rpcUrls[0]
+// viem/chains bakes in a stale RPC URL for Arc Testnet (rpc.testnet.arc.network).
+// Override the chain object with the correct endpoint so wallet_addEthereumChain
+// pushes the right URL into MetaMask.
+const ARC_TESTNET_RPC = 'https://rpc.testnet.arc.io'
 
 export const arcTestnetCorrect = {
   ...arcTestnet,

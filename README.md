@@ -1,1 +1,0 @@
-# guess-the-number-arc-game

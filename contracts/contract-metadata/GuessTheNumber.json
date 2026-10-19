@@ -1,13 +1,20 @@
 {
-  "contractAddress": "0x0ed96fd2e333e4e739fb46e3514d9321505cf057",
+  "contractAddress": "0xfdf69748331fc2c91a851e62115755d56ec59207",
   "network": "ARC-TESTNET",
   "deployerWalletId": "3c2464b2-8369-52e2-a782-800bbeca5396",
   "contract_code_path": "/home/user/app/contracts/GuessTheNumber.sol",
   "contract_compiled_code_path": "/home/user/app/contracts/out/GuessTheNumber.sol/GuessTheNumber.json",
   "contract_network_and_links": {
-    "Arc Testnet": "https://explorer.testnet.arc.io/address/0x0ed96fd2e333e4e739fb46e3514d9321505cf057"
+    "Arc Testnet": "https://explorer.testnet.arc.io/address/0xfdf69748331fc2c91a851e62115755d56ec59207"
   },
   "contract_deployments": [
+    {
+      "chain": "Arc Testnet",
+      "address": "0xfdf69748331fc2c91a851e62115755d56ec59207",
+      "explorerUrl": "https://explorer.testnet.arc.io/address/0xfdf69748331fc2c91a851e62115755d56ec59207",
+      "txHash": "0xabb7fa1d38e0c11a12722512dcec7f98f4ae8fd5856a3e87fd8997880cfede41",
+      "deployedAt": "2026-10-19T15:12:33.407Z"
+    },
     {
       "chain": "Arc Testnet",
       "address": "0x0ed96fd2e333e4e739fb46e3514d9321505cf057",

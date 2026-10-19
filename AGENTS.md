@@ -14,9 +14,9 @@ A "Guess the Number" mini-game on Arc Testnet. The PC picks a secret number 1–
 
 | Contract | Network | Address |
 |---|---|---|
-| GuessTheNumber | Arc Testnet | `0x0ed96fd2e333e4e739fb46e3514d9321505cf057` |
+| GuessTheNumber | Arc Testnet | `0xfdf69748331fc2c91a851e62115755d56ec59207` |
 
-Constructor args: usdcToken=0x3600000000000000000000000000000000000000, entryFee=1000000 (1 USDC), initialOwner=0x5B12Ce46C7194aD57d143bC22847224047b1Ef42, gameServer=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (Hardhat test key #0, for demo signing).
+Constructor args: usdcToken=0x3600000000000000000000000000000000000000, entryFee=1000000 (1 USDC), initialOwner=0x877890628f38B4653Db758c62C02489d8466caF4 (user's wallet), gameServer=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (Hardhat test key #0, for demo signing).
 
 Demo game-server private key (Hardhat test #0, well-known public key): 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 — used in GuessGame.tsx to sign scores. In production, replace with a real backend signer.
 
